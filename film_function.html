@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Multimedia exhibition</title>
+        <style>
+            .hidden{
+                display: none;
+            }
+           
+            #roleDice{
+                font-size: 6em;
+            }
+            .intro{
+                font-family: 'Courier New', Courier, monospace;
+                font-size: 2em;
+                margin-bottom: 2em;
+            }
+            #inputContainer{
+                font-family: 'Courier New', Courier, monospace;
+                font-size: 2em;
+            }
+            .clicked{
+                border: 5px solid blue;
+            }
+          
+        </style>
+    </head>
+    <body>
+   <p>“The function of film is to train human beings in the perception and reactions needed to deal with a vast apparatus whose role in their lives is expanding almost daily.”  </p>
+<p>(Artwork-Essay)</p>
+<p>
+    <video width="640" height="480" controls>
+        <source src="train.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+      </video>
+</p>
+
+<p>
+    <div class="intro">
+        <div>This is a small memory game!</div>
+        <div>Try to remember the dice! </div>
+        </div>
+        <button id="roleDice" onclick="rollDice()" >Roll Dice</button>
+        <div id="diceview">
+        </div>
+        
+        <div id="inputContainer">
+        <div>Click the dice in the right order. </div>
+
+        <div>
+           <div> <button class="dice" id="dice1"onclick="constructdiceresult(1)"><img src='dice1.png'/></button> <button class="dice" id="dice2" onclick="constructdiceresult(2)"><img src='dice2.png'/></button> </div>
+           <div> <button  class="dice" id="dice3" onclick="constructdiceresult(3)"><img src='dice3.png'/></button> <button class="dice" id="dice4"  onclick="constructdiceresult(4)"><img src='dice4.png'/></button> </div>
+           <div> <button class="dice" id="dice5" onclick="constructdiceresult(5)"><img src='dice5.png'/></button> <button  class="dice" id="dice6" onclick="constructdiceresult(6)"><img src='dice6.png'/></button> </div>
+        </div>
+        </div>
+</p>
+</body>
+<footer>
+    <a href="picture.html">Walk back</a>
+    <a href="film_performance.html">Walk on</a>
+</footer>
+<script>
+    var counter = 1;
+    var diceArray = [];
+    var testdiceresultcounter = 0;
+    var diceresult = "";
+    document.getElementById("inputContainer").classList.add("hidden");
+
+    function rollDice(){
+        document.getElementById("roleDice").classList.add("hidden");
+        diceArray = [];
+        for(var i=0; i < counter; i++){
+            diceArray.push(Math.floor((Math.random() * 5)+1));
+        }  
+
+        document.getElementById("diceview").innerHTML= constructView(diceArray);
+        setTimeout(()=>{
+            document.getElementById("diceview").classList.add("hidden");
+            document.getElementById("inputContainer").classList.remove("hidden");
+            
+        }, 1000)
+
+    }
+    function constructView(array){
+        var view = "";
+        array.forEach((dice)=>{
+            view = view +"<span>"+"<img src='dice"+dice+".png'/>"+"</span>";
+        })
+        return "<div>"+view+"</div>";
+    }
+    function testresult(mydiceresult){
+        var result = mydiceresult;
+        var arrayString = "";
+        diceArray.forEach((dice)=>{
+            arrayString = arrayString + dice;
+        })
+        if(arrayString === result){
+            alert("That was right! Continue!")
+            counter++;
+        }else{
+            alert("That was wrong! Start again!")
+            counter = 1;
+        }
+        document.getElementById("diceview").innerHTML= "";
+        document.getElementById("inputContainer").classList.add("hidden");
+        document.getElementById("diceview").classList.remove("hidden");
+        document.getElementById("roleDice").classList.remove("hidden");
+        diceArray = [];
+        diceresult = "";
+        document.querySelectorAll(".dice").forEach((dice)=>{
+            dice.classList.remove("clicked");
+        })
+
+
+    }
+   
+    function constructdiceresult(number){
+        document.querySelector("#dice"+number).classList.add("clicked")
+        diceresult = diceresult + number;
+        setTimeout(()=>{
+            document.querySelector("#dice"+number).classList.remove("clicked")
+
+        },100)
+        setTimeout(()=>{
+            if(diceresult.length === diceArray.length){
+         testresult(diceresult);
+        }
+        },100)
+      
+
+    }
+</script>
+</html>
